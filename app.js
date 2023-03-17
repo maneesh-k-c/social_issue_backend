@@ -4,7 +4,10 @@ app.use(express.json())
 app.use(express.static('./public'));
 
 const signupRouter=require('./src/routes/signupRouter')
-const signinRouter=require('./src/routes/signinRouter')
+const signinRouter=require('./src/routes/signinRouter');
+const WorkerRouter = require("./src/routes/workerRouter");
+const ComplaintRouter = require("./src/routes/complaintRouter");
+
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -23,6 +26,8 @@ app.use(express.urlencoded({extended:true}))
 
 app.use('/signup',signupRouter)
 app.use('/sign_in',signinRouter)
+app.use('/worker',WorkerRouter)
+app.use('/complaint',ComplaintRouter)
 
 app.listen(3000,()=>{
     console.log('server started at port http://localhost:3000')
