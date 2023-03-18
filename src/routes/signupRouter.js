@@ -25,7 +25,7 @@ RegisterRouter.post("/user", async (req, res) => {
       if (oldemail) {
         return res.status(400).json({ success:false, error:true, message: "Email id already exists" });
       } 
-      var log = {  username:req.body.username, password:hashedPassword, role:2  }
+      var log = {  username:req.body.username, password:hashedPassword, role:2, status:0  }
       const result = await login(log).save()
       var reg = {login_id:result._id, name:req.body.name, address:req.body.address, phone:req.body.phone, email:req.body.email}
       const result2 = await register(reg).save()
@@ -55,7 +55,7 @@ RegisterRouter.post("/company", async (req, res) => {
     if (oldemail) {
       return res.status(400).json({ success:false, error:true, message: "Email id already exists" });
     } 
-    var log = {  username:req.body.username, password:hashedPassword, role:1  }
+    var log = {  username:req.body.username, password:hashedPassword, role:1, status:0  }
     const result = await login(log).save()
     var reg = {login_id:result._id, company_name:req.body.company_name, address:req.body.address, phone:req.body.phone, email:req.body.email}
     const result2 = await company(reg).save()
@@ -85,7 +85,7 @@ RegisterRouter.post("/department", async (req, res) => {
     if (oldemail) {
       return res.status(400).json({ success:false, error:true, message: "Email id already exists" });
     } 
-    var log = {  username:req.body.username, password:hashedPassword, role:3  }
+    var log = {  username:req.body.username, password:hashedPassword, role:3, status:0  }
     const result = await login(log).save()
     var reg = {login_id:result._id, department_name:req.body.department_name, address:req.body.address, phone:req.body.phone, email:req.body.email, description:req.body.description}
     const result2 = await deparment(reg).save()
