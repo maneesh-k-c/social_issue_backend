@@ -40,6 +40,7 @@ signinRouter.post("/", async (req, res) => {
                 error: false,
                 username: oldUser.username,
                 login_id: oldUser._id,
+                status:oldUser.status,
                 role: oldUser.role,
             })
         }

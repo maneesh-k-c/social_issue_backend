@@ -103,11 +103,12 @@
                   <td><%=user[i].address%></td>
                   <td><%=user[i].phone%></td>
                   <td>
-                    <% if(user[i].status === "0"){%>
+                    <% if(user[i].status === "1"){%>
+                      <a class="btn btn-outline-danger" style="width: 85px;" href="/admin/delete/<%=user[0]._id%>" type="button">Delete</a>
+                  <%}else{%>
                     <a class="btn btn-outline-primary" href="/admin/approve/<%=user[0]._id%>" type="button">Approve</a> 
                     <button class="btn btn-outline-danger" style="width: 85px;" type="button">Reject</button>
-                  <%}else{%>
-                    <button class="btn btn-outline-danger" style="width: 85px;" type="button">Delete</button>
+                  
                     <%}%>
                   </td>
                 </tr>

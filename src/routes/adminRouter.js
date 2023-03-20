@@ -10,15 +10,15 @@ AdminRouter.get("/", async (req, res) => {
     res.render('dashboard')
 });
 AdminRouter.get("/view-users", async (req, res) => {
-    try{
-         login.aggregate([
+    try {
+        login.aggregate([
             {
-              '$lookup': {
-                'from': 'user_tbs', 
-                'localField': '_id', 
-                'foreignField': 'login_id', 
-                'as': 'data'
-              }
+                '$lookup': {
+                    'from': 'user_tbs',
+                    'localField': '_id',
+                    'foreignField': 'login_id',
+                    'as': 'data'
+                }
             },
             {
                 "$unwind": "$data"
@@ -29,25 +29,39 @@ AdminRouter.get("/view-users", async (req, res) => {
                     "name": { "$first": "$data.name" },
                     "address": { "$first": "$data.address" },
                     "phone": { "$first": "$data.phone" },
-                    "status": { "$first": "$status" }        
+                    "status": { "$first": "$status" }
                 }
             }
-        
-          ]).then((user)=>{
-            res.render('all-user',{user})
-         })       
-    }catch(err){
+
+        ]).then((user) => {
+            res.render('all-user', { user })
+        })
+    } catch (err) {
 
     }
-   
+
 });
 
 AdminRouter.get("/approve/:id", async (req, res) => {
     const id = req.params.id
-   login.updateOne({_id:id},{$set:{status:1}}).then((details)=>{
-res.redirect('/admin/view-users')
-   })
-    
+    login.findByIdAndUpdate({ _id: id }, { $set: { status: 1 } }).then((details) => {
+        console.log("details==>", details);
+        res.redirect('/admin/view-users')
+    })
+
+});
+AdminRouter.get("/delete/:id", async (req, res) => {
+    const id = req.params.id
+    login.deleteOne({ _id: id }).then((details) => {
+        // res.redirect('/admin/view-users')
+        console.log("details==>",details.deletedCount);
+       if(details.deletedCount===1){
+        register.deleteOne({ login_id: id }).then((details) => {
+            res.redirect('/admin/view-users')
+        })
+       }
+    })
+
 });
 
 
