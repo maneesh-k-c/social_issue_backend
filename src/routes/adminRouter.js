@@ -2,6 +2,7 @@ const express = require('express')
 const AdminRouter = express.Router()
 const register = require('../models/userData')
 const login = require('../models/loginData')
+const company = require('../models/companyData')
 var objectId = require('mongodb').ObjectID;
 
 AdminRouter.use(express.static('./public'))
@@ -50,6 +51,7 @@ AdminRouter.get("/approve/:id", async (req, res) => {
     })
 
 });
+
 AdminRouter.get("/delete/:id", async (req, res) => {
     const id = req.params.id
     login.deleteOne({ _id: id }).then((details) => {
@@ -58,6 +60,63 @@ AdminRouter.get("/delete/:id", async (req, res) => {
        if(details.deletedCount===1){
         register.deleteOne({ login_id: id }).then((details) => {
             res.redirect('/admin/view-users')
+        })
+       }
+    })
+
+});
+
+AdminRouter.get("/view-company", async (req, res) => {
+    try {
+        login.aggregate([
+            {
+                '$lookup': {
+                    'from': 'company_tbs',
+                    'localField': '_id',
+                    'foreignField': 'login_id',
+                    'as': 'data'
+                }
+            },
+            {
+                "$unwind": "$data"
+            },
+            {
+                "$group": {
+                    "_id": "$_id",
+                    "company_name": { "$first": "$data.company_name" },
+                    "address": { "$first": "$data.address" },
+                    "phone": { "$first": "$data.phone" },
+                    "status": { "$first": "$status" }
+                }
+            }
+
+        ]).then((company) => {
+            res.render('all-company', { company })
+        })
+    } catch (err) {
+
+    }
+
+});
+
+AdminRouter.get("/approve_company/:id", async (req, res) => {
+    const id = req.params.id
+    console.log("id==>",id);
+    login.findByIdAndUpdate({ _id: id }, { $set: { status: 1 } }).then((details) => {
+        console.log("details==>", details);
+        res.redirect('/admin/view-company')
+    })
+
+});
+
+AdminRouter.get("/delete_company/:id", async (req, res) => {
+    const id = req.params.id
+    login.deleteOne({ _id: id }).then((details) => {
+        // res.redirect('/admin/view-users')
+        console.log("details==>",details.deletedCount);
+       if(details.deletedCount===1){
+        company.deleteOne({ login_id: id }).then((details) => {
+            res.redirect('/admin/view-company')
         })
        }
     })
