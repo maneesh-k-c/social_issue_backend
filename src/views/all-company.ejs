@@ -13,7 +13,7 @@
     <meta property="og:url" content="http://pratikborsadiya.in/blog/vali-admin">
     <meta property="og:image" content="http://pratikborsadiya.in/blog/vali-admin/hero-social.png">
     <meta property="og:description" content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
-    <title>Basic Tables - Vali Admin</title>
+    <title>Admin</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,7 +64,7 @@
         </li>
         <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Manage Department</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
-            <li><a class="treeview-item" href="table-basic.html"><i class="icon fa fa-circle-o"></i> View Department</a></li>
+            <li><a class="treeview-item" href="/admin/view-department"><i class="icon fa fa-circle-o"></i> View Department</a></li>
            
           </ul>
         </li>
@@ -107,7 +107,7 @@
                       <a class="btn btn-outline-danger" style="width: 85px;" href="/admin/delete_company/<%=company[i]._id%>" type="button">Delete</a>
                   <%}else{%>
                     <a class="btn btn-outline-primary" href="/admin/approve_company/<%=company[i]._id%>" type="button">Approve</a> 
-                    <button class="btn btn-outline-danger" style="width: 85px;" type="button">Reject</button>
+                    <a class="btn btn-outline-danger"  href="/admin/delete_company/<%=company[i]._id%>" style="width: 85px;" type="button">Reject</a>
                   
                     <%}%>
                   </td>
