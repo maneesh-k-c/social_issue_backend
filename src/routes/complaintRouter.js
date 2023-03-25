@@ -7,7 +7,7 @@ var objectId = require('mongodb').ObjectID;
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "../client/public/upload")
+        cb(null, "../images/complaints")
     },
     filename: function (req, file, cb) {
         cb(null, req.body.name)
