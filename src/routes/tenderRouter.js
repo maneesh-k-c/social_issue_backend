@@ -28,10 +28,10 @@ TenderRouter.post("/add-tender", async (req, res) => {
 
 
 
-TenderRouter.get("/view-all-workers/:id", async (req, res) => {
+TenderRouter.get("/department-added-tender/:id", async (req, res) => {
     try {
         const id = req.params.id
-        const allData = await Workerdata.find({ company_id: id });
+        const allData = await tender.find({ department_id: id });
         if (allData) {
             return res.status(200).json({ success: true, error: false, data: allData });
         }
@@ -46,11 +46,28 @@ TenderRouter.get("/view-all-workers/:id", async (req, res) => {
 }
 );
 
-
-TenderRouter.get("/view-single-worker/:id", async (req, res) => {
+TenderRouter.get("/company-view-tender/:id", async (req, res) => {
     try {
         const id = req.params.id
-        const allData = await Workerdata.findOne({ _id: id });
+        const allData = await tender.find({ company_id: id });
+        if (allData[0]) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+TenderRouter.get("/view-single-tender/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await tender.findOne({ _id: id });
         if (allData) {
             return res.status(200).json({ success: true, error: false, data: allData });
         }
@@ -65,12 +82,12 @@ TenderRouter.get("/view-single-worker/:id", async (req, res) => {
 }
 );
 
-TenderRouter.get("/delete-single-worker/:id", async (req, res) => {
+TenderRouter.get("/delete-tender/:id", async (req, res) => {
     try {
         const id = req.params.id
-        const allData = await Workerdata.deleteOne({ _id: id });
+        const allData = await tender.deleteOne({ _id: id });
         if (allData) {
-            return res.status(200).json({ success: true, error: false, message: "Worker Deleted" });
+            return res.status(200).json({ success: true, error: false, message: "Tender Deleted" });
         }
         else {
             res.status(201).json({ success: false, error: true, message: "No data found" });
@@ -83,13 +100,49 @@ TenderRouter.get("/delete-single-worker/:id", async (req, res) => {
 }
 );
 
-TenderRouter.post("/update-single-worker/:id", async (req, res) => {
+TenderRouter.post("/accept-tender/:id", async (req, res) => {
     try {
         const id = req.params.id
-        var details = { name: req.body.name, address: req.body.address, phone: req.body.phone }
-        const allData = await Workerdata.updateOne({ _id: id }, { $set: details });
+        const allData = await tender.updateOne({ _id: id }, { $set: {status:1} });
         if (allData) {
-            return res.status(200).json({ success: true, error: false, message: "Worker Details Updated" });
+            return res.status(200).json({ success: true, error: false, message: "Tender Accepted" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+TenderRouter.post("/reject-tender/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await tender.updateOne({ _id: id }, { $set: {status:0} });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, message: "Tender Rejected" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+TenderRouter.post("/update-single-tender/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        var details = { company_id: req.body.company_id, department_id: req.body.department_id, tender_name: req.body.tender_name, job_start_date: req.body.job_start_date, job_end_date: req.body.job_end_date, status: req.body.status, description: req.body.description }
+        const allData = await tender.updateOne({ _id: id }, { $set: details });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, message: "Tender Details Updated" });
         }
         else {
             res.status(201).json({ success: false, error: true, message: "No data found" });

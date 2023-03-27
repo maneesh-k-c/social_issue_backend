@@ -5,6 +5,7 @@ const register = require('../models/userData')
 const login = require('../models/loginData')
 const jwt = require('jsonwebtoken')
 const Company = require('../models/companyData')
+const Department = require('../models/departmentData')
 
 
 signinRouter.post("/", async (req, res) => {
@@ -30,6 +31,19 @@ signinRouter.post("/", async (req, res) => {
                     status:oldUser.status,
                     login_id: oldUser._id,
                     company_id: companyDetails._id
+                })
+            }
+        }else if (oldUser.role === '3') {
+            const departmentDetails = await Department.findOne({ login_id: oldUser._id })
+            if (departmentDetails) {
+                return res.status(200).json({
+                    success: true,
+                    error: false,
+                    username: oldUser.username,
+                    role: oldUser.role,
+                    status:oldUser.status,
+                    login_id: oldUser._id,
+                    department_id: departmentDetails._id
                 })
             }
         }
