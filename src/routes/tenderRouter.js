@@ -14,7 +14,7 @@ TenderRouter.post("/add-tender", async (req, res) => {
         if (oldTender) {
             return res.status(400).json({ success: false, error: true, message: "Tender already exists" });
         }
-        var details = { company_id: req.body.company_id, tender_name: req.body.tender_name, job_start_date: req.body.job_start_date, job_end_date: req.body.job_end_date, status: 0, description: req.body.description }
+        var details = { company_id: req.body.company_id, department_id: req.body.department_id, tender_name: req.body.tender_name, job_start_date: req.body.job_start_date, job_end_date: req.body.job_end_date, status: 0, description: req.body.description }
         const result = await tender(details).save()
         if (result) {
             res.status(201).json({ success: true, error: false, message: "Tender Added", details: result });
