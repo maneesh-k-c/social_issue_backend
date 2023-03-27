@@ -1,22 +1,23 @@
 const express = require('express')
-const WorkerRouter = express.Router()
+const TenderRouter = express.Router()
 const bcrypt = require('bcryptjs');
 const Workerdata = require('../models/workerData');
 const departmentWorkerdata = require('../models/departmentWorker')
+const tender = require('../models/tenderData')
 
 
 
 
-WorkerRouter.post("/", async (req, res) => {
+TenderRouter.post("/add-tender", async (req, res) => {
     try {
-        const oldPhone = await Workerdata.findOne({ phone: req.body.phone });
-        if (oldPhone) {
-            return res.status(400).json({ success: false, error: true, message: "Phone Number already exists" });
+        const oldTender = await tender.findOne({ tender_name: req.body.tender_name });
+        if (oldTender) {
+            return res.status(400).json({ success: false, error: true, message: "Tender already exists" });
         }
-        var details = { company_id: req.body.company_id, name: req.body.name, address: req.body.address, phone: req.body.phone }
-        const result = await Workerdata(details).save()
+        var details = { company_id: req.body.company_id, tender_name: req.body.tender_name, job_start_date: req.body.job_start_date, job_end_date: req.body.job_end_date, status: 0, description: req.body.description }
+        const result = await tender(details).save()
         if (result) {
-            res.status(201).json({ success: true, error: false, message: "Worker Registration completed", details: result });
+            res.status(201).json({ success: true, error: false, message: "Tender Added", details: result });
         }
     } catch (error) {
         res.status(500).json({ success: false, error: true, message: "Something went wrong" });
@@ -25,25 +26,9 @@ WorkerRouter.post("/", async (req, res) => {
 }
 );
 
-WorkerRouter.post("/depatment-worker", async (req, res) => {
-    try {
-        const oldPhone = await departmentWorkerdata.findOne({ phone: req.body.phone });
-        if (oldPhone) {
-            return res.status(400).json({ success: false, error: true, message: "Phone Number already exists" });
-        }
-        var details = { company_id: req.body.company_id, name: req.body.name, address: req.body.address, phone: req.body.phone }
-        const result = await Workerdata(details).save()
-        if (result) {
-            res.status(201).json({ success: true, error: false, message: "Worker Registration completed", details: result });
-        }
-    } catch (error) {
-        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
-        console.log(error);
-    }
-}
-);
 
-WorkerRouter.get("/view-all-workers/:id", async (req, res) => {
+
+TenderRouter.get("/view-all-workers/:id", async (req, res) => {
     try {
         const id = req.params.id
         const allData = await Workerdata.find({ company_id: id });
@@ -62,7 +47,7 @@ WorkerRouter.get("/view-all-workers/:id", async (req, res) => {
 );
 
 
-WorkerRouter.get("/view-single-worker/:id", async (req, res) => {
+TenderRouter.get("/view-single-worker/:id", async (req, res) => {
     try {
         const id = req.params.id
         const allData = await Workerdata.findOne({ _id: id });
@@ -80,7 +65,7 @@ WorkerRouter.get("/view-single-worker/:id", async (req, res) => {
 }
 );
 
-WorkerRouter.get("/delete-single-worker/:id", async (req, res) => {
+TenderRouter.get("/delete-single-worker/:id", async (req, res) => {
     try {
         const id = req.params.id
         const allData = await Workerdata.deleteOne({ _id: id });
@@ -98,7 +83,7 @@ WorkerRouter.get("/delete-single-worker/:id", async (req, res) => {
 }
 );
 
-WorkerRouter.post("/update-single-worker/:id", async (req, res) => {
+TenderRouter.post("/update-single-worker/:id", async (req, res) => {
     try {
         const id = req.params.id
         var details = { name: req.body.name, address: req.body.address, phone: req.body.phone }
@@ -128,4 +113,4 @@ WorkerRouter.post("/update-single-worker/:id", async (req, res) => {
 
 
 
-module.exports = WorkerRouter
+module.exports = TenderRouter
