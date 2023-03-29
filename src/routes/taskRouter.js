@@ -10,7 +10,7 @@ TaskRouter.post("/add-task", async (req, res) => {
             task_name: req.body.task_name,
             date: req.body.date,
             description: req.body.description,
-            status: req.body.status
+            status: "Assigned"
         }
         const result = await task(details).save()
         if (result) {

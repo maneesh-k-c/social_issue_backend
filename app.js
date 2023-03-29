@@ -11,6 +11,7 @@ const WorkerRouter = require("./src/routes/workerRouter");
 const ComplaintRouter = require("./src/routes/complaintRouter");
 const AdminRouter = require("./src/routes/adminRouter");
 const TenderRouter = require("./src/routes/tenderRouter");
+const TaskRouter = require("./src/routes/taskRouter");
 
 
 
@@ -35,6 +36,7 @@ app.use('/worker', WorkerRouter)
 app.use('/complaint', ComplaintRouter)
 app.use('/admin', AdminRouter)
 app.use('/tender', TenderRouter)
+app.use('/task', TaskRouter)
 
 app.listen(3000, () => {
   console.log('server started at port http://localhost:3000')
