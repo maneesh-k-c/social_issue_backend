@@ -5,10 +5,14 @@ const register = require('../models/userData')
 const login = require('../models/loginData')
 const company = require('../models/companyData')
 const deparment = require('../models/departmentData')
+const worker = require('../models/departmentWorker')
 
 // company role : 1
 // user role : 2
 // department role : 3
+// department role : 4
+
+
 
 RegisterRouter.post("/user", async (req, res) => {
   try {
