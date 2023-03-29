@@ -28,29 +28,29 @@ WorkerRouter.post("/", async (req, res) => {
 
 WorkerRouter.post("/department-worker", async (req, res) => {
     try {
-      const oldUser = await login.findOne({ username: req.body.username });
-      if (oldUser) {
-        return res.status(400).json({ success: false, error: true, message: "User already exists" });
-      }
-      const hashedPassword = await bcrypt.hash(req.body.password, 12);
-      const oldphone = await departmentWorkerdata.findOne({ phone: req.body.phone });
-      if (oldphone) {
-        return res.status(400).json({ success: false, error: true, message: "Phone number already exists" });
-      }
-      var log = { username: req.body.username, password: hashedPassword, role: 4, status: 1 }
-      const result = await login(log).save()
-      var reg = { login_id: result._id, department_id:req.body.department_id, name: req.body.name, address: req.body.address, phone: req.body.phone }
-      const result2 = await departmentWorkerdata(reg).save()
-      if (result2) {
-        res.status(201).json({ success: true, error: false, message: "Registration completed", details: result2 });
-      }
-  
+        const oldUser = await login.findOne({ username: req.body.username });
+        if (oldUser) {
+            return res.status(400).json({ success: false, error: true, message: "User already exists" });
+        }
+        const hashedPassword = await bcrypt.hash(req.body.password, 12);
+        const oldphone = await departmentWorkerdata.findOne({ phone: req.body.phone });
+        if (oldphone) {
+            return res.status(400).json({ success: false, error: true, message: "Phone number already exists" });
+        }
+        var log = { username: req.body.username, password: hashedPassword, role: 4, status: 1 }
+        const result = await login(log).save()
+        var reg = { login_id: result._id, department_id: req.body.department_id, name: req.body.name, address: req.body.address, phone: req.body.phone }
+        const result2 = await departmentWorkerdata(reg).save()
+        if (result2) {
+            res.status(201).json({ success: true, error: false, message: "Registration completed", details: result2 });
+        }
+
     } catch (error) {
-      res.status(500).json({ success: false, error: true, message: "Something went wrong" });
-      console.log(error);
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
     }
-  }
-  );
+}
+);
 
 WorkerRouter.get("/department-view-all-workers/:id", async (req, res) => {
     try {
@@ -68,7 +68,7 @@ WorkerRouter.get("/department-view-all-workers/:id", async (req, res) => {
         console.log(error);
     }
 }
-);  
+);
 
 WorkerRouter.get("/view-all-workers/:id", async (req, res) => {
     try {
@@ -109,9 +109,14 @@ WorkerRouter.get("/view-single-department-worker/:id", async (req, res) => {
 WorkerRouter.get("/delete-single-department-worker/:id", async (req, res) => {
     try {
         const id = req.params.id
-        const allData = await departmentWorkerdata.deleteOne({ _id: id });
+        const allData = await departmentWorkerdata.findOne({ _id: id });
         if (allData) {
-            return res.status(200).json({ success: true, error: false, message: "Worker Deleted" });
+            departmentWorkerdata.deleteOne({ _id: id }).then(() => {
+                login.deleteOne({ _id: allData.login_id }).then(() => {
+                    return res.status(200).json({ success: true, error: false, message: "Worker Deleted" });
+                })
+            })
+
         }
         else {
             res.status(201).json({ success: false, error: true, message: "No data found" });
@@ -145,9 +150,13 @@ WorkerRouter.get("/view-single-worker/:id", async (req, res) => {
 WorkerRouter.get("/delete-single-worker/:id", async (req, res) => {
     try {
         const id = req.params.id
-        const allData = await Workerdata.deleteOne({ _id: id });
+        const allData = await Workerdata.findOne({ _id: id });
         if (allData) {
-            return res.status(200).json({ success: true, error: false, message: "Worker Deleted" });
+            Workerdata.deleteOne({ _id: id }).then((details) => {
+                login.deleteOne({ _id: allData.login_id }).then((d) => {
+                    return res.status(200).json({ success: true, error: false, message: "Worker Deleted" });
+                })
+            })
         }
         else {
             res.status(201).json({ success: false, error: true, message: "No data found" });
