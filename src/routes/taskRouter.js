@@ -10,7 +10,7 @@ TaskRouter.post("/add-task", async (req, res) => {
             task_name: req.body.task_name,
             date: req.body.date,
             description: req.body.description,
-            status: "Assigned"
+            status: 0
         }
         const result = await task(details).save()
         if (result) {
@@ -23,5 +23,76 @@ TaskRouter.post("/add-task", async (req, res) => {
 }
 );
 
+TaskRouter.get("/department-added-task/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await task.find({ department_id: id });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+TaskRouter.get("/delete-task/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await task.deleteOne({ _id: id });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, message: "Task Deleted" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+TaskRouter.get("/worker-view-task/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await task.find({ worker_id: id });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+TaskRouter.get("/update-task/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await task.updateOne({ _id: id }, { $set: {status:1} });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, message: "Task Updated" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
 
 module.exports = TaskRouter
