@@ -23,6 +23,24 @@ TaskRouter.post("/add-task", async (req, res) => {
 }
 );
 
+TaskRouter.post("/view-single-task/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await task.findOne({ _id: id });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
 TaskRouter.get("/department-added-task/:id", async (req, res) => {
     try {
         const id = req.params.id
