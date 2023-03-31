@@ -8,6 +8,7 @@ const ComplaintSchema = new Schema({
      description:{ type: String, required: true },
      image:{ type: String, required: true },
      location:{ type: String, required: true },
+     reply:{ type: String },
 
 })
 var Complaintdata = mongoose.model('complaint_tb',ComplaintSchema)
