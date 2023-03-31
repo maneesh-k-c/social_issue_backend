@@ -52,6 +52,24 @@ ComplaintRouter.get("/view-all-complaints", async (req, res) => {
 }
 );
 
+ComplaintRouter.get("/user-added-complaints/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await Complaint.find({login_id:id});
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
 ComplaintRouter.post("/reply-complaints/:id", async (req, res) => {
     const id = req.params.id
     try {
