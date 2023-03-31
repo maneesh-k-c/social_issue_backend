@@ -50,8 +50,7 @@ signinRouter.post("/", async (req, res) => {
             }
         }else if (oldUser.role === '4') {
             const departmentWorker = await DepartmentWorkerdata.findOne({ login_id: oldUser._id })
-        
-            if (departmentWorker) {
+            if (departmentDetails) {
                 return res.status(200).json({
                     success: true,
                     error: false,
