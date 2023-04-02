@@ -52,6 +52,24 @@ ComplaintRouter.get("/view-all-complaints", async (req, res) => {
 }
 );
 
+ComplaintRouter.get("/view-all-complaints/:id", async (req, res) => {
+    const department_id = req.params.id
+    try {
+        const allData = await Complaint.find({department_id:department_id});
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
 ComplaintRouter.get("/user-added-complaints/:id", async (req, res) => {
     try {
         const id = req.params.id
