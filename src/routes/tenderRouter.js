@@ -5,7 +5,8 @@ const Workerdata = require('../models/workerData');
 const departmentWorkerdata = require('../models/departmentWorker')
 const tender = require('../models/tenderData')
 const asigntender = require('../models/assignTender')
-
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 
 
@@ -47,6 +48,61 @@ TenderRouter.get("/department-added-tender/:id", async (req, res) => {
     try {
         const id = req.params.id
         const allData = await tender.find({ department_id: id });
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+TenderRouter.get("/assigned-tender/:id", async (req, res) => {
+    try {
+       const company_id = req.params.id 
+       console.log(company_id);
+        const allData = await asigntender.aggregate([
+            {
+              '$lookup': {
+                'from': 'tender_tbs', 
+                'localField': 'tender_id', 
+                'foreignField': '_id', 
+                'as': 'tender'
+              }
+            }, {
+              '$lookup': {
+                'from': 'worker_tbs', 
+                'localField': 'worker_id', 
+                'foreignField': '_id', 
+                'as': 'worker'
+              }
+            },
+            {
+                '$unwind':'$tender'
+            },
+            {
+                '$unwind':'$worker'
+            },
+            {
+                '$match':{
+                    "company_id":new ObjectId(company_id)
+                }
+            },
+            {
+                "$group":{
+                    '_id':"$_id",
+                    "worker_name":{"$first":"$worker.name"},
+                    "tender_name":{"$first":"$tender.tender_name"},
+                    "start_date":{"$first":"$tender.job_start_date"},
+                    "end_date":{"$first":"$tender.job_end_date"}
+                }
+            }
+          ])
         if (allData) {
             return res.status(200).json({ success: true, error: false, data: allData });
         }
