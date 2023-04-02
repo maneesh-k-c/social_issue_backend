@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const Workerdata = require('../models/workerData');
 const departmentWorkerdata = require('../models/departmentWorker')
 const tender = require('../models/tenderData')
+const asigntender = require('../models/assignTender')
 
 
 
@@ -28,14 +29,12 @@ TenderRouter.post("/add-tender", async (req, res) => {
 
 TenderRouter.post("/assign-tender", async (req, res) => {
     try {
-        const oldTender = await tender.findOne({ tender_name: req.body.tender_name });
-        if (oldTender) {
-            return res.status(400).json({ success: false, error: true, message: "Tender already exists" });
-        }
-        var details = { company_id: req.body.company_id, department_id: req.body.department_id, tender_name: req.body.tender_name, job_start_date: req.body.job_start_date, job_end_date: req.body.job_end_date, status: 0, description: req.body.description }
-        const result = await tender(details).save()
+    
+        var details = { company_id: req.body.company_id, tender_id: req.body.tender_id, worker_id: req.body.worker_id,status:"0" }
+        const result = await asigntender(details).save()
         if (result) {
-            res.status(201).json({ success: true, error: false, message: "Tender Added", details: result });
+            await tender.updateOne({_id:details.tender_id},{$set:{status:"2"}})
+            res.status(201).json({ success: true, error: false, message: "Added to worker", details: result });
         }
     } catch (error) {
         res.status(500).json({ success: false, error: true, message: "Something went wrong" });
