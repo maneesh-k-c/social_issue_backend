@@ -140,7 +140,19 @@ RegisterRouter.get("/view-all-companies", async (req, res) => {
 
 RegisterRouter.get("/view-all-dipartments", async (req, res) => {
   try {
-    const allData = await deparment.find();
+    const allData = await deparment.aggregate([
+      {
+        '$lookup': {
+            'from': 'login_tbs',
+            'localField': 'login_id',
+            'foreignField': '_id',
+            'as': 'data'
+        }
+    },
+    {
+      "$match":{"$data.status":"1"}
+    }
+    ]);
     if (allData) {
       return res.status(200).json({ success: true, error: false, data: allData });
     }
