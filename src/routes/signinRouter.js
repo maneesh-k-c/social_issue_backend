@@ -10,6 +10,29 @@ const DepartmentWorker = require('../models/departmentWorker')
 const DepartmentWorkerdata = require('../models/departmentWorker')
 
 
+signinRouter.post("/admin-login", async (req, res) => {
+    const { username, password } = req.body;
+    console.log(username);
+
+    try {
+        const oldUser = await login.findOne({ username })
+        if (!oldUser) return res.redirect('/admin')
+        const isPasswordCorrect =  bcrypt.compare(password, oldUser.password)
+        console.log("user", isPasswordCorrect);
+
+        if (!isPasswordCorrect) return res.redirect('/admin')
+
+        if (oldUser.role === '0') {
+                const admin = await login.findOne({ _id: oldUser._id })
+                if (admin) {
+                    return res.redirect('/admin/index')
+                }           
+        }       
+    } catch (error) {
+        return res.status(500).redirect('/admin')
+    }
+})
+
 signinRouter.post("/", async (req, res) => {
     const { username, password } = req.body;
     console.log(username);

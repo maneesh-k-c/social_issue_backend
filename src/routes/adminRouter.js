@@ -4,11 +4,20 @@ const register = require('../models/userData')
 const login = require('../models/loginData')
 const company = require('../models/companyData')
 const department = require('../models/departmentData')
+const complaint = require('../models/complaintData')
 var objectId = require('mongodb').ObjectID;
 
 AdminRouter.use(express.static('./public'))
 
 AdminRouter.get("/", async (req, res) => {
+    res.render('login')
+});
+
+AdminRouter.get('/logout',(req,res)=>{
+    res.render('login')
+})
+
+AdminRouter.get("/index", async (req, res) => {
     res.render('dashboard')
 });
 AdminRouter.get("/view-users", async (req, res) => {
@@ -178,6 +187,52 @@ AdminRouter.get("/delete_department/:id", async (req, res) => {
         })
        }
     })
+
+});
+
+AdminRouter.get("/view-complaint", async (req, res) => {
+    try {
+        complaint.aggregate([
+            {
+                '$lookup': {
+                    'from': 'user_tbs',
+                    'localField': 'login_id',
+                    'foreignField': 'login_id',
+                    'as': 'data'
+                }
+            },
+            {
+                '$lookup': {
+                    'from': 'department_tbs',
+                    'localField': 'department_id',
+                    'foreignField': '_id',
+                    'as': 'department'
+                }
+            },
+            {
+                "$unwind": "$data"
+            },
+            {
+                "$unwind": "$department"
+            },
+            {
+                "$group": {
+                    "_id": "$_id",
+                    "name": { "$first": "$data.name" },
+                    "phone": { "$first": "$data.phone" },
+                    "department_name": { "$first": "$department.department_name" },
+                    "complaint_title": { "$first": "$complaint_title" },
+                    "description": { "$first": "$description" },
+                }
+            }
+
+        ]).then((complaint) => {
+            
+            res.render('all-complaints', { complaint })
+        })
+    } catch (err) {
+
+    }
 
 });
 

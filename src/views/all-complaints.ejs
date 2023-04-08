@@ -40,40 +40,40 @@
     <!-- Sidebar menu-->
     <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
     <aside class="app-sidebar">
-      <div class="app-sidebar__user"><img width="50px" height="50px" class="app-sidebar__user-avatar" src="/images/user.png" alt="User Image">
-        <div>
-          <p class="app-sidebar__user-name">Admin</p>
-          <p class="app-sidebar__user-designation">Frontend Developer</p>
+        <div class="app-sidebar__user"><img width="50px" height="50px" class="app-sidebar__user-avatar" src="/images/user.png" alt="User Image">
+          <div>
+            <p class="app-sidebar__user-name">Admin</p>
+            <p class="app-sidebar__user-designation">Frontend Developer</p>
+          </div>
         </div>
-      </div>
-      <ul class="app-menu">
-        <li><a class="app-menu__item active" href="dashboard.html"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Manage User</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a class="treeview-item" href="/admin/view-users"><i class="icon fa fa-circle-o"></i> View Users</a></li>
-          </ul>
-        </li>
-       
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Manage Company</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a class="treeview-item" href="/admin/view-company"><i class="icon fa fa-circle-o"></i> View Companies</a></li>
+        <ul class="app-menu">
+          <li><a class="app-menu__item active" href="dashboard.html"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
+          <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Manage User</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+            <ul class="treeview-menu">
+              <li><a class="treeview-item" href="/admin/view-users"><i class="icon fa fa-circle-o"></i> View Users</a></li>
+            </ul>
+          </li>
          
-          </ul>
-        </li>
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Manage Department</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a class="treeview-item" href="/admin/view-department"><i class="icon fa fa-circle-o"></i> View Department</a></li>
+          <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Manage Company</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+            <ul class="treeview-menu">
+              <li><a class="treeview-item" href="/admin/view-company"><i class="icon fa fa-circle-o"></i> View Companies</a></li>
            
-          </ul>
-        </li>
-       
-        <li><a class="app-menu__item" href="/admin/view-complaint"><i class="app-menu__icon fa fa-file-code-o"></i><span class="app-menu__label">Complaints</span></a></li>
-      </ul>
-    </aside>
+            </ul>
+          </li>
+          <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Manage Department</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+            <ul class="treeview-menu">
+              <li><a class="treeview-item" href="/admin/view-department"><i class="icon fa fa-circle-o"></i> View Department</a></li>
+             
+            </ul>
+          </li>
+         
+          <li><a class="app-menu__item" href="/admin/view-complaint"><i class="app-menu__icon fa fa-file-code-o"></i><span class="app-menu__label">Complaints</span></a></li>
+        </ul>
+      </aside>
     <main class="app-content">
       <div class="app-title">
         <div>
-          <h1><i class="fa fa-th-list"></i> User Details</h1>
+          <h1><i class="fa fa-th-list"></i> Complaint Details</h1>
          
         </div>
        
@@ -82,33 +82,28 @@
        
         <div class="col-md-12">
           <div class="tile">
-            <h3 class="tile-title">All Companies</h3>
+            <h3 class="tile-title">All Complaints</h3>
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
-                  <th>Address</th>
-                  <th>Phone</th>
-                  <th>Action</th>
+                  <th>User Name</th>
+                  <th>User Phone</th>
+                  <th>Department Name</th>
+                  <th>Complaint</th>
+                  <th>Description</th>
                 </tr>
               </thead>
               <tbody>
-                <%for(i=0;i<company.length;i++){%>
+                <%for(i=0;i<complaint.length;i++){%>
                 <tr>
                   <td><%=i+1%></td>
-                  <td><%=company[i].company_name%></td>
-                  <td><%=company[i].address%></td>
-                  <td><%=company[i].phone%></td>
-                  <td>
-                    <% if(company[i].status === "1"){%>
-                      <a class="btn btn-outline-danger" style="width: 85px;" href="/admin/delete_company/<%=company[i]._id%>" type="button">Delete</a>
-                  <%}else{%>
-                    <a class="btn btn-outline-primary" href="/admin/approve_company/<%=company[i]._id%>" type="button">Approve</a> 
-                    <a class="btn btn-outline-danger"  href="/admin/delete_company/<%=company[i]._id%>" style="width: 85px;" type="button">Reject</a>
-                  
-                    <%}%>
-                  </td>
+                  <td><%=complaint[i].name%></td>
+                  <td><%=complaint[i].phone%></td>
+                  <td><%=complaint[i].department_name%></td>
+                  <td><%=complaint[i].complaint_title%></td>
+                  <td><%=complaint[i].description%></td>
+                 
                 </tr>
                <%}%>
               </tbody>
