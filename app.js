@@ -39,5 +39,5 @@ app.use('/tender', TenderRouter)
 app.use('/task', TaskRouter)
 
 app.listen(3000, () => {
-  console.log('server started at port http://localhost:3000')
+  console.log('server started at port http://localhost:3000/admin')
 })
