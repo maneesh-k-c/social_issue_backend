@@ -7,16 +7,17 @@ var objectId = require('mongodb').ObjectID;
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "../images/complaints")
+        cb(null, "./public/images/")
     },
     filename: function (req, file, cb) {
-        cb(null, req.body.name)
+        cb(null, file.originalname)
     }
 })
 
 var upload = multer({ storage: storage })
 
 ComplaintRouter.post('/upload-image', upload.single("file"), (req, res) => {
+    console.log("jh",req.file.filename);
     return res.json("file uploaded")
 })
 
