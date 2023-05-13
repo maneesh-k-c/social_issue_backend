@@ -5,9 +5,56 @@ const login = require('../models/loginData')
 const company = require('../models/companyData')
 const department = require('../models/departmentData')
 const complaint = require('../models/complaintData')
+const categorydata = require('../models/categoryData')
+
 var objectId = require('mongodb').ObjectID;
 
 AdminRouter.use(express.static('./public'))
+
+AdminRouter.get("/add-category", async (req, res) => {
+    res.render('add-category')
+});
+AdminRouter.get("/add-sub-category", async (req, res) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+
+});
+
+AdminRouter.get("/view-category", async (req, res) => {
+    try {
+        const category = await categorydata.find()
+        console.log(category);
+        res.render('view-category',{category})
+    } catch (error) {
+        
+    }
+   
+});
+
+AdminRouter.get("/save-category", async (req, res) => {
+    try {
+        const data = await categorydata.create({category_name:req.query.category_name,description:req.query.description})
+        if(data){
+            res.redirect('/admin/view-category')
+        }
+        
+    } catch (error) {
+        
+    }
+    
+});
+
+AdminRouter.get("/delete_category/:id", async (req, res) => {
+    const id = req.params.id
+    categorydata.deleteOne({ _id: id }).then((details) => {
+        res.redirect('/admin/view-category')       
+    })
+
+});
+
 
 AdminRouter.get("/", async (req, res) => {
     res.render('login')
@@ -235,6 +282,8 @@ AdminRouter.get("/view-complaint", async (req, res) => {
     }
 
 });
+
+
 
 
 

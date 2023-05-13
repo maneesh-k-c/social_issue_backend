@@ -3,10 +3,26 @@ const WorkerRouter = express.Router()
 const bcrypt = require('bcryptjs');
 const Workerdata = require('../models/workerData');
 const departmentWorkerdata = require('../models/departmentWorker')
+const category = require('../models/categoryData')
 const login = require('../models/loginData')
 
 
+WorkerRouter.get("/view-category", async (req, res) => {
+    try {
+        const allData = await category.find();
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
 
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
 
 WorkerRouter.post("/", async (req, res) => {
     try {
