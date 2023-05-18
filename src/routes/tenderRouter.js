@@ -4,11 +4,28 @@ const bcrypt = require('bcryptjs');
 const Workerdata = require('../models/workerData');
 const departmentWorkerdata = require('../models/departmentWorker')
 const tender = require('../models/tenderData')
+const tenderreply = require('../models/tenderReplyData')
 const asigntender = require('../models/assignTender')
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-
+TenderRouter.post("/add-tender-reply", async (req, res) => {
+    try {
+        const oldTender = await tender.findOne({ tender_id: req.body.tender_id, company_id:req.body.company_id });
+        if (oldTender) {
+            return res.status(400).json({ success: false, error: true, message: "Tender already requested" });
+        }
+        var details = {company_id: req.body.company_id, tender_id: req.body.tender_id, amount: req.body.amount,status: 0}
+        const result = await tenderreply(details).save()
+        if (result) {
+            res.status(201).json({ success: true, error: false, message: "Tender Request Added", details: result });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
 
 TenderRouter.post("/add-tender", async (req, res) => {
     try {
