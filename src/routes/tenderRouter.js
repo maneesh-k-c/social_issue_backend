@@ -117,9 +117,9 @@ TenderRouter.get("/assigned-tender/:id", async (req, res) => {
 }
 );
 
-TenderRouter.get("/company-view-tender/:id", async (req, res) => {
+TenderRouter.get("/company-view-tender/", async (req, res) => {
     try {
-        const id = req.params.id
+   
         const allData = await tender.find({ status: 0 });
         if (allData[0]) {
             return res.status(200).json({ success: true, error: false, data: allData });
