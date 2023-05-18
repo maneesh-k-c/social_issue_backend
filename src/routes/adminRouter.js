@@ -16,7 +16,9 @@ AdminRouter.get("/add-category", async (req, res) => {
 });
 AdminRouter.get("/add-sub-category", async (req, res) => {
     try {
-        
+        const category = await categorydata.find()
+        console.log(category);
+        res.render('add-sub-category',{category})
     } catch (error) {
         
     }
