@@ -9,6 +9,63 @@ const asigntender = require('../models/assignTender')
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
+TenderRouter.get("/view-tender-reply/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const oldTender = await tenderreply.aggregate([
+            {
+              '$lookup': {
+                'from': 'company_tbs', 
+                'localField': 'company_id', 
+                'foreignField': '_id', 
+                'as': 'company'
+              }
+            }, {
+              '$lookup': {
+                'from': 'tender_tbs', 
+                'localField': 'tender_id', 
+                'foreignField': '_id', 
+                'as': 'tender'
+              }
+            },
+            {
+                "$unwind":"$company"
+            },
+            {
+                "$unwind":"$tender"
+            },
+            {
+                "$match":{
+                    "tender.department_id":new ObjectId(id)
+                }
+            },
+            {
+                "$group":{
+                    '_id':'$_id',
+                    'company_name':{"$first":"$company.company_name"},
+                    'company_phone':{"$first":"$company.phone"},
+                    'company_email':{"$first":"$company.email"},
+                    'tender_name':{"$first":"$tender.tender_name"},
+                    'job_start_date':{"$first":"$tender.job_start_date"},
+                    'job_end_date':{"$first":"$tender.job_end_date"},
+                    'tender_status':{"$first":"$tender.status"},
+                    'tender_reply_status':{"$first":"$status"},
+                    'tender_reply_amount':{"$first":"$amount"},
+                }
+            }
+          ]);
+        if (oldTender) {
+            return res.status(400).json({ success: true, error: false, data: oldTender });
+        }else {
+            res.status(201).json({ success: false, error: false, message: "No replys"});
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
 TenderRouter.post("/add-tender-reply", async (req, res) => {
     try {
         const oldTender = await tender.findOne({ tender_id: req.body.tender_id, company_id:req.body.company_id });
