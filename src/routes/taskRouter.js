@@ -23,6 +23,26 @@ TaskRouter.post("/add-task", async (req, res) => {
 }
 );
 
+TaskRouter.get("/update-task/:task_id", async (req, res) => {
+    try {
+        const task_id = req.params.task_id
+        
+        const allData = await task.updateOne({ _id: task_id }, { $set: {  task_name: req.body.task_name,date: req.body.date, description: req.body.description } });
+        if (allData.modifiedCount===1) {
+           
+            return res.status(200).json({ success: true, error: false, message: "Task Updated" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
 TaskRouter.post("/view-single-task/:id", async (req, res) => {
     try {
         const id = req.params.id
