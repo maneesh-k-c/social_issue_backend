@@ -47,6 +47,7 @@ TenderRouter.get("/view-low-tender-amount/:id", async (req, res) => {
                     'company_email': { "$first": "$company.email" },
                     'tender_name': { "$first": "$tender.tender_name" },
                     'tender_id': { "$first": "$tender._id" },
+                    'tender_reply_id': { "$first": "$_id" },
                     'job_start_date': { "$first": "$tender.job_start_date" },
                     'job_end_date': { "$first": "$tender.job_end_date" },
                     'tender_status': { "$first": "$tender.status" },
