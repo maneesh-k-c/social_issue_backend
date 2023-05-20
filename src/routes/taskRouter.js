@@ -2,6 +2,8 @@ const express = require('express')
 const TaskRouter = express.Router()
 const task = require('../models/taskData');
 
+
+
 TaskRouter.post("/add-task", async (req, res) => {
     try {
         var details = {
@@ -23,7 +25,7 @@ TaskRouter.post("/add-task", async (req, res) => {
 }
 );
 
-TaskRouter.get("/update-task/:task_id", async (req, res) => {
+TaskRouter.post("/update-task/:task_id", async (req, res) => {
     try {
         const task_id = req.params.task_id
         
