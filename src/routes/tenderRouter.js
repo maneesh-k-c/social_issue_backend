@@ -9,46 +9,42 @@ const asigntender = require('../models/assignTender')
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-// TenderRouter.get("/view-companies-accepted-tender/:id", async (req, res) => {
-//     try {
-//         const id = req.params.id
-//         const allData = await tenderreply.aggregate([
-//             {
-//                 '$lookup': {
-//                     'from': 'tender_tbs',
-//                     'localField': 'tender_id',
-//                     'foreignField': '_id',
-//                     'as': 'tender'
-//                 }
-//             },
-//             {
-//                 "$unwind": "$tender"
-//             },
-//             {
-//                 "$match": {
-//                     "tender.company_id": new ObjectId(id)
-//                 }
-//             },
-//             {
-//                 "$match": {
-//                     "tender.company_id": new ObjectId(id)
-//                 }
-//             },
-//         ]);
-//         { company_id: id, status:1 }
-//         if (allData) {
-//             return res.status(200).json({ success: true, error: false, data: allData });
-//         }
-//         else {
-//             res.status(201).json({ success: false, error: true, message: "No data found" });
-//         }
+TenderRouter.get("/view-companies-accepted-tender/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const allData = await tenderreply.aggregate([
+            {
+                '$lookup': {
+                    'from': 'tender_tbs',
+                    'localField': 'tender_id',
+                    'foreignField': '_id',
+                    'as': 'tender'
+                }
+            },
+            {
+                "$unwind": "$tender"
+            },
+            {
+                "$match": {
+                    "company_id": new ObjectId(id),
+                    "status": '1'
+                }
+            },
+        ]);
+        
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
 
-//     } catch (error) {
-//         res.status(500).json({ success: false, error: true, message: "Something went wrong" });
-//         console.log(error);
-//     }
-// }
-// );
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
 
 TenderRouter.get("/accept-low-cost-tender/:tender_id/:tender_reply_id", async (req, res) => {
     try {
