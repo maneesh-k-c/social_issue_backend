@@ -9,6 +9,26 @@ const asigntender = require('../models/assignTender')
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
+TenderRouter.get("/company-finish-tender/:tender_id/:tender_reply_id", async (req, res) => {
+    try {
+        const tender_id = req.params.tender_id
+        const tender_reply_id = req.params.tender_reply_id
+        const allData = await tender.updateOne({ _id: tender_id }, { $set: { status: 1 } });
+        if (allData.modifiedCount===1) {
+            const allDatas = await tenderreply.updateOne({ _id: tender_reply_id }, { $set: { status: 1 } });
+            return res.status(200).json({ success: true, error: false, message: "Tender Request Approved" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
 TenderRouter.get("/view-companies-accepted-tender/:id", async (req, res) => {
     try {
         const id = req.params.id
@@ -30,6 +50,7 @@ TenderRouter.get("/view-companies-accepted-tender/:id", async (req, res) => {
                     "status": '1'
                 }
             },
+           
         ]);
         
         if (allData) {
