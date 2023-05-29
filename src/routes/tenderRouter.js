@@ -210,8 +210,7 @@ TenderRouter.get("/view-tender-reply/:id", async (req, res) => {
         res.status(500).json({ success: false, error: true, message: "Something went wrong" });
         console.log(error);
     }
-}
-);
+});
 
 TenderRouter.post("/add-tender-reply", async (req, res) => {
     try {
@@ -228,8 +227,7 @@ TenderRouter.post("/add-tender-reply", async (req, res) => {
         res.status(500).json({ success: false, error: true, message: "Something went wrong" });
         console.log(error);
     }
-}
-);
+});
 
 TenderRouter.post("/add-tender", async (req, res) => {
     try {
@@ -246,8 +244,7 @@ TenderRouter.post("/add-tender", async (req, res) => {
         res.status(500).json({ success: false, error: true, message: "Something went wrong" });
         console.log(error);
     }
-}
-);
+});
 
 TenderRouter.post("/assign-tender", async (req, res) => {
     try {
@@ -262,8 +259,7 @@ TenderRouter.post("/assign-tender", async (req, res) => {
         res.status(500).json({ success: false, error: true, message: "Something went wrong" });
         console.log(error);
     }
-}
-);
+});
 
 TenderRouter.get("/department-added-tender/:id", async (req, res) => {
     try {
