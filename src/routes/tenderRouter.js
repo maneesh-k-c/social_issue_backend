@@ -114,6 +114,11 @@ TenderRouter.get("/view-low-tender-amount/:id", async (req, res) => {
             },
             {
                 "$match": {
+                    "status": 0
+                }
+            },
+            {
+                "$match": {
                     "tender.department_id": new ObjectId(id)
                 }
             },
