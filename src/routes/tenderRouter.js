@@ -192,6 +192,11 @@ TenderRouter.get("/view-tender-reply/:id", async (req, res) => {
                 }
             },
             {
+                "$match": {
+                    "status": "0"
+                }
+            },
+            {
                 "$group": {
                     '_id': '$_id',
                     'company_name': { "$first": "$company.company_name" },
